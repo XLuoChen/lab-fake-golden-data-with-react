@@ -1,10 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>form-tools</title>
+  <meta charset="UTF-8">
+  <title>form-tools</title>
+  <style>
+    #header {
+      text-align: center;
+      width: 1127px;
+      height: 50px;
+      margin-top: 20px;
+      margin-left: 45px;
+      margin-bottom: 50px;
+    }
+
+    #selectedParts {
+      text-align: center;
+      /*width: 564px;*/
+      height: 600px;
+      margin-left: 51px;
+      /*background-color: #E8E8E8;*/
+      float: left;
+    }
+
+    #selectedParts div {
+      margin-bottom: 20px;
+    }
+
+    #selectableParts {
+      text-align: center;
+      /*background-color: #E8E8E8;*/
+      /*width: 563px;*/
+      height: 600px;
+      float: right;
+      margin-right: 30px;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="./build/react.js"></script>
+  <script src="./build/react-dom.js"></script>
+  <script src="./build/browser.min.js"></script>
+
+  <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
 </head>
 <body>
+<div id='page'></div>
 
+<script type="text/babel">
+
+  const choosed = [];
+
+  const TopButton = React.createClass({
+    render: function () {
+      return (
+        <div id='header'>
+          <center>
+            <button type="button" className="btn btn-primary btn-lg ">{this.props.name}</button>
+          </center>
+        </div>
+      );
+    }
+  });
+
+  const SelectedTextArea = React.createClass({
+    render: function () {
+      return (
+        <div>
+          <form className="form-inline" role="form">
+            <input className="form-control" type="text" placeholder="请输入文本"/>
+            <button type="button" className="btn btn-default">删除</button>
+          </form>
+        </div>
+      );
+    }
+  });
+
+  const SelectedChiocedDate = React.createClass({
+    handleClick: function (i) {
+      choosed.slice(i, 1);
+    },
+    render: function () {
+      return (
+        <div>
+          <form className="form-inline" role="form">
+            <input type="date" placeholder="2016-8-2"/>
+            <button type="button" className="btn btn-default" onClick={this.handleClick.bind(this, this.props.index)}>删除
+            </button>
+          </form>
+        </div>
+      )
+    }
+  });
+
+  const ShowMaterial = React.createClass({
+    getInitialState: function () {
+      return {text: false, date: false};
+    },
+    handleChange1: function () {
+      this.setState({text: !this.state.text});
+    },
+    handleChange2: function () {
+      this.setState({date: !this.state.date});
+    },
+    loadElements: function () {
+      if (this.state.text === true) {
+        choosed.push(0);
+      }
+      if (this.state.date === true) {
+        choosed.push(1);
+      }
+    },
+    render: function () {
+      return (
+        <div>
+          <div className="col-md-6 column" id='selectableParts'>
+            <form className="form-inline" role="form">
+              <input type="checkbox" id="text" onChange={this.handleChange1.bind(this)}/> 请打勾
+              <input className="form-control" type="text" placeholder="文本框" disabled/>
+            </form>
+            <br/>
+            <form className="form-inline" role="form">
+              <input type="checkbox" id="date" onChange={this.handleChange2.bind(this)}/> 请打勾
+              <input type="date" placeholder="2016-8-2" disabled/>
+            </form>
+            <br />
+            <button type="submit" className="btn btn-default" onClick={this.loadElements}>添加</button>
+          </div>
+          <div className="col-md-5 column" id='selectedParts'>
+            {choosed.map((item, i) => item === 0 ? <SelectedTextArea index={i}/> : <SelectedChiocedDate index={i}/>)}
+          </div>
+        </div>
+      );
+    }
+  });
+
+  const EditPage = React.createClass({
+    render: function () {
+      return (
+        <div>
+          <TopButton name="预览"/>
+          <div className="row" id='mainer'>
+            <ShowMaterial />
+          </div>
+        </div>
+      )
+    }
+  });
+  
+
+  ReactDOM.render(<EditPage />, document.getElementById('page'));
+
+</script>
 </body>
 </html>
