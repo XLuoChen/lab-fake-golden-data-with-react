@@ -18,7 +18,7 @@
 
 <script type="text/babel">
 
-  const choosed = [];
+  let choosed = [];
 
   const TopButton = React.createClass({
     handleClick: function () {
@@ -55,15 +55,15 @@
   });
 
   const SelectedChiocedDate = React.createClass({
-    handleClick: function (i) {
-      choosed.slice(i, 1);
+    handleClick: function () {
+      this.props.selected.splice(this.props.index, 1);
     },
     render: function () {
       return (
         <div>
           <form className="form-inline" role="form">
             <input type="date" placeholder="2016-8-2"/>
-            <button type="button" className="btn btn-default" onClick={this.handleClick.bind(this, this.props.index)}>删除
+            <button type="button" className="btn btn-default" onClick={this.handleClick}>删除
             </button>
           </form>
         </div>
@@ -71,9 +71,22 @@
     }
   });
 
+  const ShowSelected = React.createClass({
+
+    render: function () {
+      return (
+        <div className="col-md-5 column" id='selectedParts'>
+          {this.props.selected.map((item, i) => item === 0 ?
+            <SelectedTextArea index={i} selected = {this.props.selected}/>
+            : <SelectedChiocedDate index={i} selected = {this.props.selected}/>)}
+        </div>
+      )
+    }
+  });
+
   const ShowMaterial = React.createClass({
     getInitialState: function () {
-      return {text: false, date: false};
+      return {text: false, date: false, selected: []};
     },
     handleChange1: function () {
       this.setState({text: !this.state.text});
@@ -81,13 +94,16 @@
     handleChange2: function () {
       this.setState({date: !this.state.date});
     },
-    loadElements: function () {
+    handlePush: function () {
       if (this.state.text === true) {
-        choosed.push(0);
+        this.state.selected.push(0);
+        this.setState({selected: this.state.selected});
       }
       if (this.state.date === true) {
-        choosed.push(1);
+        this.state.selected.push(1);
+        this.setState({selected: this.state.selected});
       }
+      choosed = this.state.selected;
     },
     render: function () {
       return (
@@ -103,11 +119,9 @@
               <input type="date" placeholder="2016-8-2" disabled/>
             </form>
             <br />
-            <button type="submit" className="btn btn-default" onClick={this.loadElements}>添加</button>
+            <button type="submit" className="btn btn-default" onClick={this.handlePush}>添加</button>
           </div>
-          <div className="col-md-5 column" id='selectedParts'>
-            {choosed.map((item, i) => item === 0 ? <SelectedTextArea index={i}/> : <SelectedChiocedDate index={i}/>)}
-          </div>
+          <ShowSelected selected = {this.state.selected}/>
         </div>
       );
     }
@@ -126,6 +140,16 @@
     }
   });
 
+  const loadSelectedAtPre = React.createClass({
+    render: function () {
+      return (
+        <div className="col-md-5 column" id='selectedParts'>
+          {this.props.selected.map((item, i) => item === 0 ? <SelectedTextArea index={i}/> : <SelectedChiocedDate index={i}/>)}
+        </div>
+      )
+    }
+  })
+
   var PreviewPage = React.createClass({
 
     render: function () {
@@ -133,9 +157,9 @@
         <div>
           <TopButton name="编辑"/>
           <div id="preview">
-            {choosed.map((item, i) => item === 0 ? <SelectedTextArea index={i}/> : <SelectedChiocedDate index={i}/>)}
+            <loadSelectedAtPre selected = {choosed}/>
           </div>
-          <div id = "footer" className="centerButton">
+          <div id="footer" className="centerButton">
             <center>
               <button type="button" className="btn btn-primary btn-lg " disabled>提交</button>
             </center>
