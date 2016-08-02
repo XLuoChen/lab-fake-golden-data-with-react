@@ -55,15 +55,17 @@
   });
 
   const SelectedChiocedDate = React.createClass({
+
     handleClick: function () {
       this.props.selected.splice(this.props.index, 1);
+      choosed.splice(this.props.index, 1);
     },
     render: function () {
       return (
         <div>
           <form className="form-inline" role="form">
             <input type="date" placeholder="2016-8-2"/>
-            <button type="button" className="btn btn-default" onClick={this.handleClick}>删除
+            <button type="button" className="btn btn-default" onClick={this.handleClick.bind(this)}>删除
             </button>
           </form>
         </div>
@@ -71,14 +73,14 @@
     }
   });
 
-  const ShowSelected = React.createClass({
+  var ShowSelected = React.createClass({
 
     render: function () {
       return (
         <div className="col-md-5 column" id='selectedParts'>
           {this.props.selected.map((item, i) => item === 0 ?
-            <SelectedTextArea index={i} selected = {this.props.selected}/>
-            : <SelectedChiocedDate index={i} selected = {this.props.selected}/>)}
+            <SelectedTextArea index={i} selected={this.props.selected}/>
+            : <SelectedChiocedDate index={i} selected={this.props.selected}/>)}
         </div>
       )
     }
@@ -121,7 +123,7 @@
             <br />
             <button type="submit" className="btn btn-default" onClick={this.handlePush}>添加</button>
           </div>
-          <ShowSelected selected = {this.state.selected}/>
+          <ShowSelected selected={this.state.selected}/>
         </div>
       );
     }
@@ -140,11 +142,12 @@
     }
   });
 
-  const loadSelectedAtPre = React.createClass({
+  const LoadSelectedAtPre = React.createClass({
     render: function () {
       return (
-        <div className="col-md-5 column" id='selectedParts'>
-          {this.props.selected.map((item, i) => item === 0 ? <SelectedTextArea index={i}/> : <SelectedChiocedDate index={i}/>)}
+        <div>
+          {this.props.selected.map((item, i) => item === 0 ? <SelectedTextArea index={i}/> :
+            <SelectedChiocedDate index={i}/>)}
         </div>
       )
     }
@@ -157,7 +160,7 @@
         <div>
           <TopButton name="编辑"/>
           <div id="preview">
-            <loadSelectedAtPre selected = {choosed}/>
+            <LoadSelectedAtPre selected={choosed}/>
           </div>
           <div id="footer" className="centerButton">
             <center>
