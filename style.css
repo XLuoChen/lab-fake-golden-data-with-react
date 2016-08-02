@@ -1,0 +1,40 @@
+#header {
+  margin-top: 20px;
+}
+
+#footer {
+  margin-top: 550px;
+}
+
+.centerButton {
+  width: 1127px;
+  margin-left: 45px;
+  margin-bottom: 50px;
+}
+
+#selectedParts {
+  text-align: center;
+  height: 600px;
+  margin-left: 51px;
+  float: left;
+}
+
+#selectedParts div {
+  margin-bottom: 20px;
+}
+
+#selectableParts {
+  text-align: center;
+  height: 600px;
+  float: right;
+  margin-right: 30px;
+}
+
+#preview {
+  position: absolute;
+  margin-bottom: 100px;
+  margin-left: 300px;
+  width: 600px;
+  height: 450px;
+  border: solid red 1px;
+}
